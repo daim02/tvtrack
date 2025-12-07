@@ -2,26 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>TV Tracker</title>
+  <title>TVTrack</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
+  <!-- iOS home-screen style -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <style>
     :root {
-      --bg: #050608;
-      --card: #111317;
-      --accent: #4f8cff;
-      --accent-soft: rgba(79, 140, 255, 0.15);
-      --text: #f5f5f7;
-      --muted: #9b9ba1;
-      --danger: #ff4b6a;
-      --radius-lg: 16px;
-      --radius-sm: 10px;
-      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
-      --border-subtle: 1px solid rgba(255, 255, 255, 0.04);
-      --blur: blur(18px);
+      --bg: #f5f5f7;
+      --card-bg: #ffffff;
+      --border: #e3e3e8;
+      --border-subtle: #ececf0;
+      --accent: #007aff;
+      --accent-soft: #e5f1ff;
+      --text-main: #111111;
+      --text-muted: #7a7a85;
+      --danger: #ff3b30;
+      --radius-lg: 12px;
+      --radius-sm: 9px;
     }
 
     * {
@@ -33,9 +33,9 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      background: radial-gradient(circle at top, #1d2640 0, #050608 40%, #050608 100%);
-      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
     }
 
     body {
@@ -46,199 +46,236 @@
 
     .app {
       width: 100%;
-      max-width: 640px;
-      padding: 12px 14px 18px;
+      max-width: 720px;
+      padding: 16px 14px 20px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     header {
       padding-top: env(safe-area-inset-top);
+      padding-bottom: 4px;
       display: flex;
-      justify-content: space-between;
       align-items: baseline;
+      justify-content: space-between;
       gap: 8px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.35rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-weight: 650;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
     }
 
     header span {
-      font-size: 0.8rem;
-      color: var(--muted);
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
 
     main {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       flex: 1;
       min-height: 0;
     }
 
     .card {
-      background: rgba(10, 12, 18, 0.86);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
+      background: var(--card-bg);
       border-radius: var(--radius-lg);
-      padding: 14px 14px 12px;
-      box-shadow: var(--shadow-soft);
-      border: var(--border-subtle);
+      border: 1px solid var(--border);
+      padding: 12px 12px 10px;
+    }
+
+    .card + .card {
+      margin-top: 2px;
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
-    .card-header h2 {
-      font-size: 0.9rem;
-      margin: 0;
+    .card-title {
+      font-size: 0.82rem;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--muted);
+      color: var(--text-muted);
+    }
+
+    .card-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
 
     form {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 8px 10px;
       align-items: flex-end;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .field label {
       font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px 9px;
-      font-size: 0.9rem;
-      background: rgba(10, 12, 18, 0.9);
-      color: var(--text);
-      outline: none;
-    }
-
-    input::placeholder {
-      color: rgba(155, 155, 161, 0.6);
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(79, 140, 255, 0.65);
-    }
-
-    .field-wide {
-      grid-column: span 2;
+      color: var(--text-muted);
     }
 
     .field-show {
       grid-column: span 4;
     }
 
-    .btn-primary {
-      border: none;
-      border-radius: 999px;
-      padding: 9px 14px;
+    .field-wide {
+      grid-column: span 2;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      padding: 8px 9px;
       font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      background: radial-gradient(circle at top left, #7aa3ff, #4f8cff);
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 12px 28px rgba(44, 93, 255, 0.55);
+      background: #ffffff;
+      color: var(--text-main);
+      outline: none;
     }
 
-    .btn-primary:active {
-      transform: translateY(1px) scale(0.99);
-      box-shadow: 0 6px 16px rgba(44, 93, 255, 0.45);
+    input::placeholder {
+      color: #c1c1c7;
     }
 
-    .btn-secondary,
-    .btn-danger {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 4px 9px;
-      font-size: 0.75rem;
-      background: rgba(15, 17, 24, 0.95);
-      color: var(--muted);
-      cursor: pointer;
+    input:focus {
+      border-color: var(--accent);
     }
 
-    .btn-secondary {
-      background: rgba(20, 23, 32, 0.96);
-    }
-
-    .btn-danger {
-      border-color: rgba(255, 75, 106, 0.32);
-      color: #ff9cab;
-    }
-
-    .toolbar {
+    .buttons-row {
+      grid-column: span 4;
       display: flex;
       gap: 8px;
       justify-content: flex-end;
-      align-items: center;
-      margin-top: 6px;
+      margin-top: 2px;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
+      min-height: 32px;
+    }
+
+    .btn-primary:active {
+      opacity: 0.8;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f2f2f7;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      padding: 7px 10px;
+      cursor: pointer;
+      min-height: 32px;
+    }
+
+    .btn-secondary:active {
+      background: #e5e5ea;
+    }
+
+    .btn-ghost {
+      border: 0;
+      background: transparent;
+      color: var(--accent);
+      font-size: 0.8rem;
+      padding: 4px 6px;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      border-radius: 999px;
+      border: 1px solid var(--danger);
+      background: #fff5f5;
+      color: var(--danger);
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      cursor: pointer;
+      min-height: 30px;
     }
 
     .hint {
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.76rem;
+      color: var(--text-muted);
       margin-top: 6px;
     }
 
-    .list-card {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: min(420px, 60vh);
-      overflow-y: auto;
-      padding-right: 4px;
+    .list-wrapper {
+      margin-top: 4px;
     }
 
-    .show-item {
+    .list-card {
       border-radius: var(--radius-lg);
-      padding: 10px 10px 9px;
-      background: linear-gradient(135deg, rgba(25, 29, 44, 0.94), rgba(9, 10, 16, 0.96));
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .empty {
+      padding: 16px 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty span {
+      display: block;
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+
+    .show-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      padding: 10px 12px;
       gap: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .show-row:first-child {
+      border-top: 0;
     }
 
     .show-main {
       flex: 1;
       min-width: 0;
+      text-align: left;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
     }
 
     .show-title {
-      font-weight: 550;
       font-size: 0.98rem;
-      margin-bottom: 3px;
+      font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -246,47 +283,39 @@
 
     .show-meta {
       font-size: 0.8rem;
-      color: var(--muted);
+      color: var(--text-muted);
+      margin-top: 2px;
     }
 
     .show-meta strong {
       color: var(--accent);
-      font-weight: 550;
-    }
-
-    .show-actions {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-      align-items: center;
+      font-weight: 500;
     }
 
     .pill {
-      font-size: 0.72rem;
-      padding: 3px 7px;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
       border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid rgba(79, 140, 255, 0.55);
+      border: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: #f5f5f7;
     }
 
-    .empty-state {
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--muted);
-      padding: 22px 8px 10px;
-    }
-
-    .empty-state span {
-      display: block;
-      font-size: 2rem;
-      margin-bottom: 4px;
-      opacity: 0.6;
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     @media (max-width: 520px) {
       .app {
-        padding: 10px 10px 16px;
+        padding: 10px 10px 18px;
+      }
+
+      header h1 {
+        font-size: 1.25rem;
       }
 
       form {
@@ -298,12 +327,17 @@
       }
 
       .field-wide {
-        grid-column: span 1;
+        grid-column: span 2;
+      }
+
+      .buttons-row {
+        grid-column: span 2;
+        justify-content: flex-start;
       }
 
       .btn-primary {
-        font-size: 0.8rem;
-        padding: 8px 10px;
+        flex: 1;
+        text-align: center;
       }
     }
   </style>
@@ -311,14 +345,16 @@
 <body>
   <div class="app">
     <header>
-      <h1>TV Tracker</h1>
-      <span>Local · No login</span>
+      <h1>TVTrack</h1>
+      <span>Local only · No login</span>
     </header>
 
     <main>
+      <!-- FORM CARD -->
       <section class="card">
         <div class="card-header">
-          <h2>Now watching</h2>
+          <div class="card-title">Now watching</div>
+          <div class="card-sub" id="form-status"></div>
         </div>
 
         <form id="show-form">
@@ -330,7 +366,7 @@
               id="show-name"
               type="text"
               autocomplete="off"
-              placeholder="e.g. Better Call Saul"
+              placeholder="Better Call Saul"
               required
             />
           </div>
@@ -360,37 +396,37 @@
           </div>
 
           <div class="field field-wide">
-            <label for="timestamp">Time in episode (optional)</label>
+            <label for="timestamp">Time in episode</label>
             <input
               id="timestamp"
               type="text"
               inputmode="decimal"
-              placeholder="mm:ss or just minutes"
+              placeholder="mm:ss or minutes (optional)"
             />
           </div>
 
-          <button class="btn-primary" type="submit" id="save-btn">
-            <span id="save-btn-label">Save position</span>
-          </button>
+          <div class="buttons-row">
+            <button type="button" class="btn-secondary" id="clear-form-btn">
+              Clear
+            </button>
+            <button type="submit" class="btn-primary">
+              <span id="save-btn-label">Save position</span>
+            </button>
+          </div>
         </form>
 
-        <div class="toolbar">
-          <button class="btn-secondary" type="button" id="clear-form-btn" aria-label="Clear form">
-            Clear form
-          </button>
-        </div>
-
         <p class="hint">
-          Tip: Tap a show in the list to load it into the form. All data stays on this device only.
+          Tip: Tap a show in the list to load it into the form and update your progress.
         </p>
       </section>
 
-      <section class="card">
-        <div class="card-header">
-          <h2>Your shows</h2>
+      <!-- LIST CARD -->
+      <section class="list-wrapper">
+        <div class="card-header" style="padding: 0 2px 6px;">
+          <div class="card-title">Your shows</div>
         </div>
 
-        <div class="list-card">
+        <div class="list-card" id="shows-card">
           <div id="shows-container"></div>
         </div>
       </section>
@@ -399,7 +435,7 @@
 
   <script>
     (function () {
-      const STORAGE_KEY = "tv-tracker-shows-v1";
+      const STORAGE_KEY = "tv-tracker-shows-v2";
 
       /** @type {Array<{id:string,name:string,season:number|null,episode:number|null,timestamp:string,lastUpdated:number}>} */
       let shows = [];
@@ -413,6 +449,7 @@
       const showsContainer = document.getElementById("shows-container");
       const clearFormBtn = document.getElementById("clear-form-btn");
       const saveBtnLabel = document.getElementById("save-btn-label");
+      const formStatus = document.getElementById("form-status");
 
       function loadShows() {
         try {
@@ -432,61 +469,8 @@
           localStorage.setItem(STORAGE_KEY, JSON.stringify(shows));
         } catch (err) {
           console.error("Failed to save shows", err);
-          alert("Could not save data (storage might be full).");
+          alert("Could not save data. Storage might be full.");
         }
-      }
-
-      function formatMeta(show) {
-        const parts = [];
-        if (show.season) {
-          parts.push("S" + show.season);
-        }
-        if (show.episode) {
-          parts.push("E" + show.episode);
-        }
-        if (show.timestamp && show.timestamp.trim() !== "") {
-          parts.push(show.timestamp.trim());
-        }
-        return parts.join(" · ");
-      }
-
-      function renderShows() {
-        if (!shows.length) {
-          showsContainer.innerHTML =
-            '<div class="empty-state"><span>📺</span>Nothing here yet. Add your first show above.</div>';
-          return;
-        }
-
-        const sorted = [...shows].sort((a, b) => b.lastUpdated - a.lastUpdated);
-
-        const html = sorted
-          .map((show) => {
-            const meta = formatMeta(show);
-            const hasProgress = Boolean(meta);
-            return `
-            <div class="show-item" data-id="${show.id}">
-              <button class="show-main" data-action="edit">
-                <div class="show-title">${escapeHtml(show.name)}</div>
-                <div class="show-meta">
-                  ${
-                    hasProgress
-                      ? `<strong>${escapeHtml(meta)}</strong>`
-                      : `<span class="pill">No details yet</span>`
-                  }
-                </div>
-              </button>
-              <div class="show-actions">
-                <button class="btn-secondary pill" data-action="edit">Edit</button>
-                <button class="btn-danger" data-action="delete" aria-label="Delete show">
-                  ✕
-                </button>
-              </div>
-            </div>
-          `;
-          })
-          .join("");
-
-        showsContainer.innerHTML = html;
       }
 
       function escapeHtml(str) {
@@ -498,10 +482,58 @@
           .replace(/'/g, "&#039;");
       }
 
+      function formatMeta(show) {
+        const parts = [];
+        if (show.season) parts.push("S" + show.season);
+        if (show.episode) parts.push("E" + show.episode);
+        if (show.timestamp && show.timestamp.trim() !== "") {
+          parts.push(show.timestamp.trim());
+        }
+        return parts.join(" · ");
+      }
+
+      function renderShows() {
+        if (!shows.length) {
+          showsContainer.innerHTML =
+            '<div class="empty"><span>📺</span>Add your first show above.</div>';
+          return;
+        }
+
+        const sorted = [...shows].sort((a, b) => b.lastUpdated - a.lastUpdated);
+
+        const html = sorted
+          .map((show) => {
+            const meta = formatMeta(show);
+            const hasProgress = Boolean(meta);
+            return `
+              <div class="show-row" data-id="${show.id}">
+                <button class="show-main" data-action="edit">
+                  <div class="show-title">${escapeHtml(show.name)}</div>
+                  <div class="show-meta">
+                    ${
+                      hasProgress
+                        ? `<strong>${escapeHtml(meta)}</strong>`
+                        : `<span class="pill">No details yet</span>`
+                    }
+                  </div>
+                </button>
+                <div class="row-actions">
+                  <button class="btn-ghost" data-action="edit">Edit</button>
+                  <button class="btn-danger" data-action="delete">Delete</button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+        showsContainer.innerHTML = html;
+      }
+
       function resetForm() {
         form.reset();
         editingIdInput.value = "";
         saveBtnLabel.textContent = "Save position";
+        formStatus.textContent = "";
         showNameInput.focus();
       }
 
@@ -512,6 +544,7 @@
         timestampInput.value = show.timestamp || "";
         editingIdInput.value = show.id;
         saveBtnLabel.textContent = "Update";
+        formStatus.textContent = "Editing “" + show.name + "”";
         showNameInput.focus();
       }
 
@@ -568,9 +601,10 @@
 
       showsContainer.addEventListener("click", function (event) {
         const target = event.target;
-        const item = target.closest(".show-item");
-        if (!item) return;
-        const id = item.getAttribute("data-id");
+        const row = target.closest(".show-row");
+        if (!row) return;
+
+        const id = row.getAttribute("data-id");
         if (!id) return;
 
         const action = target.getAttribute("data-action") || "edit";
@@ -594,8 +628,10 @@
         }
       });
 
+      // Initial load
       loadShows();
       renderShows();
+      showNameInput.focus();
     })();
   </script>
 </body>
