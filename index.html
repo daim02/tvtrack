@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>TV Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <style>
+    :root {
+      --bg: #050608;
+      --card: #111317;
+      --accent: #4f8cff;
+      --accent-soft: rgba(79, 140, 255, 0.15);
+      --text: #f5f5f7;
+      --muted: #9b9ba1;
+      --danger: #ff4b6a;
+      --radius-lg: 16px;
+      --radius-sm: 10px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+      --border-subtle: 1px solid rgba(255, 255, 255, 0.04);
+      --blur: blur(18px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: radial-gradient(circle at top, #1d2640 0, #050608 40%, #050608 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 640px;
+      padding: 12px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    header {
+      padding-top: env(safe-area-inset-top);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 650;
+    }
+
+    header span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card {
+      background: rgba(10, 12, 18, 0.86);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-soft);
+      border: var(--border-subtle);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-header h2 {
+      font-size: 0.9rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 9px;
+      font-size: 0.9rem;
+      background: rgba(10, 12, 18, 0.9);
+      color: var(--text);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(155, 155, 161, 0.6);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(79, 140, 255, 0.65);
+    }
+
+    .field-wide {
+      grid-column: span 2;
+    }
+
+    .field-show {
+      grid-column: span 4;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      background: radial-gradient(circle at top left, #7aa3ff, #4f8cff);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 12px 28px rgba(44, 93, 255, 0.55);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 6px 16px rgba(44, 93, 255, 0.45);
+    }
+
+    .btn-secondary,
+    .btn-danger {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 4px 9px;
+      font-size: 0.75rem;
+      background: rgba(15, 17, 24, 0.95);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: rgba(20, 23, 32, 0.96);
+    }
+
+    .btn-danger {
+      border-color: rgba(255, 75, 106, 0.32);
+      color: #ff9cab;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .list-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: min(420px, 60vh);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .show-item {
+      border-radius: var(--radius-lg);
+      padding: 10px 10px 9px;
+      background: linear-gradient(135deg, rgba(25, 29, 44, 0.94), rgba(9, 10, 16, 0.96));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .show-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .show-title {
+      font-weight: 550;
+      font-size: 0.98rem;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .show-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .show-meta strong {
+      color: var(--accent);
+      font-weight: 550;
+    }
+
+    .show-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(79, 140, 255, 0.55);
+    }
+
+    .empty-state {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 22px 8px 10px;
+    }
+
+    .empty-state span {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 4px;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        padding: 10px 10px 16px;
+      }
+
+      form {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .field-show {
+        grid-column: span 2;
+      }
+
+      .field-wide {
+        grid-column: span 1;
+      }
+
+      .btn-primary {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>TV Tracker</h1>
+      <span>Local · No login</span>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-header">
+          <h2>Now watching</h2>
+        </div>
+
+        <form id="show-form">
+          <input type="hidden" id="editing-id" value="" />
+
+          <div class="field field-show">
+            <label for="show-name">Show</label>
+            <input
+              id="show-name"
+              type="text"
+              autocomplete="off"
+              placeholder="e.g. Better Call Saul"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="season">Season</label>
+            <input
+              id="season"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              placeholder="1"
+            />
+          </div>
+
+          <div class="field">
+            <label for="episode">Episode</label>
+            <input
+              id="episode"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              placeholder="1"
+            />
+          </div>
+
+          <div class="field field-wide">
+            <label for="timestamp">Time in episode (optional)</label>
+            <input
+              id="timestamp"
+              type="text"
+              inputmode="decimal"
+              placeholder="mm:ss or just minutes"
+            />
+          </div>
+
+          <button class="btn-primary" type="submit" id="save-btn">
+            <span id="save-btn-label">Save position</span>
+          </button>
+        </form>
+
+        <div class="toolbar">
+          <button class="btn-secondary" type="button" id="clear-form-btn" aria-label="Clear form">
+            Clear form
+          </button>
+        </div>
+
+        <p class="hint">
+          Tip: Tap a show in the list to load it into the form. All data stays on this device only.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Your shows</h2>
+        </div>
+
+        <div class="list-card">
+          <div id="shows-container"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "tv-tracker-shows-v1";
+
+      /** @type {Array<{id:string,name:string,season:number|null,episode:number|null,timestamp:string,lastUpdated:number}>} */
+      let shows = [];
+
+      const form = document.getElementById("show-form");
+      const showNameInput = document.getElementById("show-name");
+      const seasonInput = document.getElementById("season");
+      const episodeInput = document.getElementById("episode");
+      const timestampInput = document.getElementById("timestamp");
+      const editingIdInput = document.getElementById("editing-id");
+      const showsContainer = document.getElementById("shows-container");
+      const clearFormBtn = document.getElementById("clear-form-btn");
+      const saveBtnLabel = document.getElementById("save-btn-label");
+
+      function loadShows() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            shows = parsed;
+          }
+        } catch (err) {
+          console.error("Failed to load shows", err);
+        }
+      }
+
+      function saveShows() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(shows));
+        } catch (err) {
+          console.error("Failed to save shows", err);
+          alert("Could not save data (storage might be full).");
+        }
+      }
+
+      function formatMeta(show) {
+        const parts = [];
+        if (show.season) {
+          parts.push("S" + show.season);
+        }
+        if (show.episode) {
+          parts.push("E" + show.episode);
+        }
+        if (show.timestamp && show.timestamp.trim() !== "") {
+          parts.push(show.timestamp.trim());
+        }
+        return parts.join(" · ");
+      }
+
+      function renderShows() {
+        if (!shows.length) {
+          showsContainer.innerHTML =
+            '<div class="empty-state"><span>📺</span>Nothing here yet. Add your first show above.</div>';
+          return;
+        }
+
+        const sorted = [...shows].sort((a, b) => b.lastUpdated - a.lastUpdated);
+
+        const html = sorted
+          .map((show) => {
+            const meta = formatMeta(show);
+            const hasProgress = Boolean(meta);
+            return `
+            <div class="show-item" data-id="${show.id}">
+              <button class="show-main" data-action="edit">
+                <div class="show-title">${escapeHtml(show.name)}</div>
+                <div class="show-meta">
+                  ${
+                    hasProgress
+                      ? `<strong>${escapeHtml(meta)}</strong>`
+                      : `<span class="pill">No details yet</span>`
+                  }
+                </div>
+              </button>
+              <div class="show-actions">
+                <button class="btn-secondary pill" data-action="edit">Edit</button>
+                <button class="btn-danger" data-action="delete" aria-label="Delete show">
+                  ✕
+                </button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+
+        showsContainer.innerHTML = html;
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function resetForm() {
+        form.reset();
+        editingIdInput.value = "";
+        saveBtnLabel.textContent = "Save position";
+        showNameInput.focus();
+      }
+
+      function fillFormFromShow(show) {
+        showNameInput.value = show.name || "";
+        seasonInput.value = show.season || "";
+        episodeInput.value = show.episode || "";
+        timestampInput.value = show.timestamp || "";
+        editingIdInput.value = show.id;
+        saveBtnLabel.textContent = "Update";
+        showNameInput.focus();
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = showNameInput.value.trim();
+        if (!name) {
+          alert("Please enter a show name.");
+          return;
+        }
+
+        const seasonRaw = seasonInput.value.trim();
+        const episodeRaw = episodeInput.value.trim();
+        const timestamp = timestampInput.value.trim();
+
+        const season = seasonRaw ? Math.max(1, parseInt(seasonRaw, 10) || 1) : null;
+        const episode = episodeRaw ? Math.max(1, parseInt(episodeRaw, 10) || 1) : null;
+        const idFromForm = editingIdInput.value || null;
+        const now = Date.now();
+
+        if (idFromForm) {
+          const index = shows.findIndex((s) => s.id === idFromForm);
+          if (index !== -1) {
+            shows[index] = {
+              ...shows[index],
+              name,
+              season,
+              episode,
+              timestamp,
+              lastUpdated: now,
+            };
+          }
+        } else {
+          const newShow = {
+            id: "show-" + now + "-" + Math.random().toString(16).slice(2),
+            name,
+            season,
+            episode,
+            timestamp,
+            lastUpdated: now,
+          };
+          shows.push(newShow);
+        }
+
+        saveShows();
+        renderShows();
+        resetForm();
+      });
+
+      clearFormBtn.addEventListener("click", function () {
+        resetForm();
+      });
+
+      showsContainer.addEventListener("click", function (event) {
+        const target = event.target;
+        const item = target.closest(".show-item");
+        if (!item) return;
+        const id = item.getAttribute("data-id");
+        if (!id) return;
+
+        const action = target.getAttribute("data-action") || "edit";
+
+        if (action === "delete") {
+          const show = shows.find((s) => s.id === id);
+          const confirmed = confirm(
+            `Delete “${show ? show.name : "this show"}” from your list?`
+          );
+          if (!confirmed) return;
+          shows = shows.filter((s) => s.id !== id);
+          saveShows();
+          renderShows();
+          if (editingIdInput.value === id) {
+            resetForm();
+          }
+        } else if (action === "edit") {
+          const show = shows.find((s) => s.id === id);
+          if (!show) return;
+          fillFormFromShow(show);
+        }
+      });
+
+      loadShows();
+      renderShows();
+    })();
+  </script>
+</body>
+</html>
