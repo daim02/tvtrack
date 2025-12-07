@@ -4,18 +4,18 @@
   <meta charset="utf-8" />
   <title>TVTrack</title>
 
-  <!-- iOS viewport + no zoom issues -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <!-- iOS viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- iPhone Home Screen behavior -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="TVTrack">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-  <!-- Use your icon -->
+  <!-- Icon for Add to Home Screen -->
   <link rel="apple-touch-icon" href="tvicon.png">
 
-  <!-- Prevent iOS auto-detecting phone numbers -->
+  <!-- Prevent auto phone detection -->
   <meta name="format-detection" content="telephone=no">
 
   <style>
@@ -44,6 +44,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text-main);
+      -webkit-text-size-adjust: 100%; /* stop Safari from resizing text */
     }
 
     body {
@@ -55,7 +56,7 @@
     .app {
       width: 100%;
       max-width: 720px;
-      padding: 24px 16px 20px;
+      padding: 18px 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -63,7 +64,7 @@
 
     header {
       padding-top: env(safe-area-inset-top);
-      padding-bottom: 6px;
+      padding-bottom: 10px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -71,7 +72,7 @@
 
     header h1 {
       margin: 0;
-      font-size: 1.28rem;
+      font-size: 1.22rem;
       font-weight: 600;
     }
 
@@ -107,6 +108,7 @@
       font-weight: 600;
       letter-spacing: 0.08em;
       color: var(--text-muted);
+      text-transform: uppercase;
     }
 
     .card-sub {
@@ -145,7 +147,7 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       padding: 8px 10px;
-      font-size: 0.9rem;
+      font-size: 16px;          /* important: >= 16px so iOS does not zoom */
       background: #ffffff;
       height: 42px;
       outline: none;
@@ -254,7 +256,7 @@
     }
 
     .show-title {
-      font-size: 1rem;
+      font-size: 0.96rem;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
@@ -293,12 +295,15 @@
       form {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .field-show {
         grid-column: span 2;
       }
+
       .field-wide {
         grid-column: span 2;
       }
+
       .buttons-row {
         grid-column: span 2;
       }
@@ -325,22 +330,22 @@
           <input type="hidden" id="editing-id">
 
           <div class="field field-show">
-            <label>Show</label>
+            <label for="show-name">Show</label>
             <input id="show-name" type="text" placeholder="Better Call Saul" required>
           </div>
 
           <div class="field">
-            <label>Season</label>
+            <label for="season">Season</label>
             <input id="season" type="number" min="1" placeholder="1">
           </div>
 
           <div class="field">
-            <label>Episode</label>
+            <label for="episode">Episode</label>
             <input id="episode" type="number" min="1" placeholder="1">
           </div>
 
           <div class="field field-wide">
-            <label>Time in episode</label>
+            <label for="timestamp">Time in episode</label>
             <input id="timestamp" type="text" placeholder="mm:ss or minutes (optional)">
           </div>
 
@@ -405,7 +410,9 @@
         const parts = [];
         if (show.season) parts.push("S" + show.season);
         if (show.episode) parts.push("E" + show.episode);
-        if (show.timestamp?.trim()) parts.push(show.timestamp.trim());
+        if (show.timestamp && show.timestamp.trim()) {
+          parts.push(show.timestamp.trim());
+        }
         return parts.join(" · ");
       }
 
@@ -462,13 +469,16 @@
         e.preventDefault();
 
         const name = showNameInput.value.trim();
-        if (!name) return alert("Please enter a show name.");
+        if (!name) {
+          alert("Please enter a show name.");
+          return;
+        }
 
         const id = editingIdInput.value;
         const now = Date.now();
 
-        const season = seasonInput.value ? parseInt(seasonInput.value) : null;
-        const episode = episodeInput.value ? parseInt(episodeInput.value) : null;
+        const season = seasonInput.value ? parseInt(seasonInput.value, 10) : null;
+        const episode = episodeInput.value ? parseInt(episodeInput.value, 10) : null;
         const timestamp = timestampInput.value.trim();
 
         if (id) {
@@ -503,7 +513,7 @@
 
         if (action === "delete") {
           const show = shows.find((s) => s.id === id);
-          if (confirm(`Delete “${show?.name}”?`)) {
+          if (confirm(`Delete “${show ? show.name : "this show"}”?`)) {
             shows = shows.filter((s) => s.id !== id);
             save();
             render();
