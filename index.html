@@ -4,18 +4,18 @@
   <meta charset="utf-8" />
   <title>TVTrack</title>
 
-  <!-- iOS viewport -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- Proper iOS viewport (pinch-zoom allowed, but stable) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- iPhone Home Screen behavior -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="TVTrack">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-  <!-- Icon for Add to Home Screen -->
+  <!-- Home Screen Icon -->
   <link rel="apple-touch-icon" href="tvicon.png">
 
-  <!-- Prevent auto phone detection -->
+  <!-- Prevent phone number detection -->
   <meta name="format-detection" content="telephone=no">
 
   <style>
@@ -44,7 +44,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text-main);
-      -webkit-text-size-adjust: 100%; /* stop Safari from resizing text */
+
+      /* 🔥 Prevent Safari aA text size scaling from breaking layout */
+      -webkit-text-size-adjust: none !important;
     }
 
     body {
@@ -56,37 +58,37 @@
     .app {
       width: 100%;
       max-width: 720px;
-      padding: 18px 16px 20px;
+      padding: 22px 16px 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     header {
       padding-top: env(safe-area-inset-top);
-      padding-bottom: 10px;
+      padding-bottom: 8px;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.22rem;
+      font-size: 1.24rem;
       font-weight: 600;
     }
 
     header span {
       font-size: 0.70rem;
       color: var(--text-muted);
+      white-space: nowrap;
     }
 
     main {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       flex: 1;
-      min-height: 0;
     }
 
     .card {
@@ -147,10 +149,11 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       padding: 8px 10px;
-      font-size: 16px;          /* important: >= 16px so iOS does not zoom */
+      font-size: 16px; /* prevents Safari zoom */
       background: #ffffff;
       height: 42px;
       outline: none;
+      width: 100%;
     }
 
     input::placeholder {
@@ -164,7 +167,7 @@
     .buttons-row {
       grid-column: span 4;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: flex-end;
       margin-top: 4px;
     }
@@ -172,6 +175,7 @@
     button {
       font-family: inherit;
       height: 42px;
+      cursor: pointer;
     }
 
     .btn-primary {
@@ -181,12 +185,7 @@
       color: #ffffff;
       font-size: 0.86rem;
       font-weight: 600;
-      padding: 0 18px;
-      cursor: pointer;
-    }
-
-    .btn-primary:active {
-      opacity: 0.85;
+      padding: 0 20px;
     }
 
     .btn-secondary {
@@ -194,13 +193,8 @@
       border: 1px solid var(--border);
       background: #f2f2f7;
       color: var(--text-main);
-      font-size: 0.82rem;
+      font-size: 0.80rem;
       padding: 0 16px;
-      cursor: pointer;
-    }
-
-    .btn-secondary:active {
-      background: #e5e5ea;
     }
 
     .hint {
@@ -210,7 +204,7 @@
     }
 
     .list-wrapper {
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     .list-card {
@@ -221,7 +215,7 @@
     }
 
     .empty {
-      padding: 24px;
+      padding: 26px;
       font-size: 0.88rem;
       color: var(--text-muted);
       text-align: center;
@@ -247,12 +241,11 @@
 
     .show-main {
       flex: 1;
-      min-width: 0;
       text-align: left;
       border: 0;
       background: transparent;
-      cursor: pointer;
       padding: 0;
+      cursor: pointer;
     }
 
     .show-title {
@@ -274,20 +267,13 @@
       font-weight: 500;
     }
 
-    .row-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .btn-danger {
       border-radius: 8px;
       border: 1px solid var(--danger);
       background: #fff5f5;
       color: var(--danger);
       padding: 0 12px;
-      font-size: 0.8rem;
-      cursor: pointer;
+      font-size: 0.80rem;
       height: 34px;
     }
 
@@ -295,18 +281,9 @@
       form {
         grid-template-columns: repeat(2, 1fr);
       }
-
-      .field-show {
-        grid-column: span 2;
-      }
-
-      .field-wide {
-        grid-column: span 2;
-      }
-
-      .buttons-row {
-        grid-column: span 2;
-      }
+      .field-show { grid-column: span 2; }
+      .field-wide { grid-column: span 2; }
+      .buttons-row { grid-column: span 2; }
     }
   </style>
 </head>
@@ -410,9 +387,7 @@
         const parts = [];
         if (show.season) parts.push("S" + show.season);
         if (show.episode) parts.push("E" + show.episode);
-        if (show.timestamp && show.timestamp.trim()) {
-          parts.push(show.timestamp.trim());
-        }
+        if (show.timestamp?.trim()) parts.push(show.timestamp.trim());
         return parts.join(" · ");
       }
 
@@ -439,9 +414,7 @@
                 }
               </div>
             </button>
-            <div class="row-actions">
-              <button class="btn-danger" data-action="delete">Delete</button>
-            </div>
+            <button class="btn-danger" data-action="delete">Delete</button>
           </div>
         `
           )
@@ -462,23 +435,19 @@
         timestampInput.value = show.timestamp || "";
         editingIdInput.value = show.id;
         saveBtnLabel.textContent = "Update";
-        formStatus.textContent = "Editing “" + show.name + "”";
+        formStatus.textContent = `Editing “${show.name}”`;
       }
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const name = showNameInput.value.trim();
-        if (!name) {
-          alert("Please enter a show name.");
-          return;
-        }
+        if (!name) return alert("Please enter a show name.");
 
         const id = editingIdInput.value;
         const now = Date.now();
-
-        const season = seasonInput.value ? parseInt(seasonInput.value, 10) : null;
-        const episode = episodeInput.value ? parseInt(episodeInput.value, 10) : null;
+        const season = seasonInput.value ? parseInt(seasonInput.value) : null;
+        const episode = episodeInput.value ? parseInt(episodeInput.value) : null;
         const timestamp = timestampInput.value.trim();
 
         if (id) {
@@ -513,7 +482,7 @@
 
         if (action === "delete") {
           const show = shows.find((s) => s.id === id);
-          if (confirm(`Delete “${show ? show.name : "this show"}”?`)) {
+          if (confirm(`Delete “${show?.name}”?`)) {
             shows = shows.filter((s) => s.id !== id);
             save();
             render();
