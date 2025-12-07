@@ -3,11 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <title>TVTrack</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- iOS home-screen style -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <!-- iOS viewport + no zoom issues -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+
+  <!-- iPhone Home Screen behavior -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="TVTrack">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Use your icon -->
+  <link rel="apple-touch-icon" href="tvicon.png">
+
+  <!-- Prevent iOS auto-detecting phone numbers -->
+  <meta name="format-detection" content="telephone=no">
 
   <style>
     :root {
@@ -16,7 +25,6 @@
       --border: #e3e3e8;
       --border-subtle: #ececf0;
       --accent: #007aff;
-      --accent-soft: #e5f1ff;
       --text-main: #111111;
       --text-muted: #7a7a85;
       --danger: #ff3b30;
@@ -47,7 +55,7 @@
     .app {
       width: 100%;
       max-width: 720px;
-      padding: 16px 14px 20px;
+      padding: 24px 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -55,22 +63,20 @@
 
     header {
       padding-top: env(safe-area-inset-top);
-      padding-bottom: 4px;
+      padding-bottom: 6px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 8px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.4rem;
+      font-size: 1.28rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
     }
 
     header span {
-      font-size: 0.78rem;
+      font-size: 0.70rem;
       color: var(--text-muted);
     }
 
@@ -86,24 +92,19 @@
       background: var(--card-bg);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      padding: 12px 12px 10px;
-    }
-
-    .card + .card {
-      margin-top: 2px;
+      padding: 14px 12px 14px;
     }
 
     .card-header {
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
     }
 
     .card-title {
       font-size: 0.82rem;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-muted);
     }
@@ -116,7 +117,7 @@
     form {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px 10px;
+      gap: 12px 10px;
       align-items: flex-end;
     }
 
@@ -143,10 +144,10 @@
     input[type="number"] {
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
-      padding: 8px 9px;
+      padding: 8px 10px;
       font-size: 0.9rem;
       background: #ffffff;
-      color: var(--text-main);
+      height: 42px;
       outline: none;
     }
 
@@ -161,13 +162,14 @@
     .buttons-row {
       grid-column: span 4;
       display: flex;
-      gap: 8px;
+      gap: 10px;
       justify-content: flex-end;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     button {
       font-family: inherit;
+      height: 42px;
     }
 
     .btn-primary {
@@ -177,13 +179,12 @@
       color: #ffffff;
       font-size: 0.86rem;
       font-weight: 600;
-      padding: 7px 14px;
+      padding: 0 18px;
       cursor: pointer;
-      min-height: 32px;
     }
 
     .btn-primary:active {
-      opacity: 0.8;
+      opacity: 0.85;
     }
 
     .btn-secondary {
@@ -192,43 +193,22 @@
       background: #f2f2f7;
       color: var(--text-main);
       font-size: 0.82rem;
-      padding: 7px 10px;
+      padding: 0 16px;
       cursor: pointer;
-      min-height: 32px;
     }
 
     .btn-secondary:active {
       background: #e5e5ea;
     }
 
-    .btn-ghost {
-      border: 0;
-      background: transparent;
-      color: var(--accent);
-      font-size: 0.8rem;
-      padding: 4px 6px;
-      cursor: pointer;
-    }
-
-    .btn-danger {
-      border-radius: 999px;
-      border: 1px solid var(--danger);
-      background: #fff5f5;
-      color: var(--danger);
-      font-size: 0.8rem;
-      padding: 5px 10px;
-      cursor: pointer;
-      min-height: 30px;
-    }
-
     .hint {
       font-size: 0.76rem;
       color: var(--text-muted);
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .list-wrapper {
-      margin-top: 4px;
+      margin-top: 8px;
     }
 
     .list-card {
@@ -239,8 +219,8 @@
     }
 
     .empty {
-      padding: 16px 12px;
-      font-size: 0.85rem;
+      padding: 24px;
+      font-size: 0.88rem;
       color: var(--text-muted);
       text-align: center;
     }
@@ -248,14 +228,14 @@
     .empty span {
       display: block;
       font-size: 1.6rem;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .show-row {
       display: flex;
       align-items: center;
-      padding: 10px 12px;
-      gap: 10px;
+      padding: 14px 12px;
+      gap: 12px;
       border-top: 1px solid var(--border-subtle);
     }
 
@@ -267,14 +247,14 @@
       flex: 1;
       min-width: 0;
       text-align: left;
-      padding: 0;
       border: 0;
       background: transparent;
       cursor: pointer;
+      padding: 0;
     }
 
     .show-title {
-      font-size: 0.98rem;
+      font-size: 1rem;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
@@ -282,7 +262,7 @@
     }
 
     .show-meta {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -292,56 +272,40 @@
       font-weight: 500;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 7px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      background: #f5f5f7;
-    }
-
     .row-actions {
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
+    .btn-danger {
+      border-radius: 8px;
+      border: 1px solid var(--danger);
+      background: #fff5f5;
+      color: var(--danger);
+      padding: 0 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      height: 34px;
+    }
+
     @media (max-width: 520px) {
-      .app {
-        padding: 10px 10px 18px;
-      }
-
-      header h1 {
-        font-size: 1.25rem;
-      }
-
       form {
         grid-template-columns: repeat(2, 1fr);
       }
-
       .field-show {
         grid-column: span 2;
       }
-
       .field-wide {
         grid-column: span 2;
       }
-
       .buttons-row {
         grid-column: span 2;
-        justify-content: flex-start;
-      }
-
-      .btn-primary {
-        flex: 1;
-        text-align: center;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="app">
     <header>
@@ -358,75 +322,43 @@
         </div>
 
         <form id="show-form">
-          <input type="hidden" id="editing-id" value="" />
+          <input type="hidden" id="editing-id">
 
           <div class="field field-show">
-            <label for="show-name">Show</label>
-            <input
-              id="show-name"
-              type="text"
-              autocomplete="off"
-              placeholder="Better Call Saul"
-              required
-            />
+            <label>Show</label>
+            <input id="show-name" type="text" placeholder="Better Call Saul" required>
           </div>
 
           <div class="field">
-            <label for="season">Season</label>
-            <input
-              id="season"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              step="1"
-              placeholder="1"
-            />
+            <label>Season</label>
+            <input id="season" type="number" min="1" placeholder="1">
           </div>
 
           <div class="field">
-            <label for="episode">Episode</label>
-            <input
-              id="episode"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              step="1"
-              placeholder="1"
-            />
+            <label>Episode</label>
+            <input id="episode" type="number" min="1" placeholder="1">
           </div>
 
           <div class="field field-wide">
-            <label for="timestamp">Time in episode</label>
-            <input
-              id="timestamp"
-              type="text"
-              inputmode="decimal"
-              placeholder="mm:ss or minutes (optional)"
-            />
+            <label>Time in episode</label>
+            <input id="timestamp" type="text" placeholder="mm:ss or minutes (optional)">
           </div>
 
           <div class="buttons-row">
-            <button type="button" class="btn-secondary" id="clear-form-btn">
-              Clear
-            </button>
+            <button type="button" class="btn-secondary" id="clear-form-btn">Clear</button>
             <button type="submit" class="btn-primary">
               <span id="save-btn-label">Save position</span>
             </button>
           </div>
         </form>
 
-        <p class="hint">
-          Tip: Tap a show in the list to load it into the form and update your progress.
-        </p>
+        <p class="hint">Tip: Tap a show in the list to edit your progress.</p>
       </section>
 
-      <!-- LIST CARD -->
+      <!-- LIST -->
       <section class="list-wrapper">
-        <div class="card-header" style="padding: 0 2px 6px;">
-          <div class="card-title">Your shows</div>
-        </div>
-
-        <div class="list-card" id="shows-card">
+        <div class="card-title" style="margin-left: 4px;">Your shows</div>
+        <div class="list-card">
           <div id="shows-container"></div>
         </div>
       </section>
@@ -435,9 +367,7 @@
 
   <script>
     (function () {
-      const STORAGE_KEY = "tv-tracker-shows-v2";
-
-      /** @type {Array<{id:string,name:string,season:number|null,episode:number|null,timestamp:string,lastUpdated:number}>} */
+      const STORAGE_KEY = "tv-tracker-shows-v3";
       let shows = [];
 
       const form = document.getElementById("show-form");
@@ -447,30 +377,19 @@
       const timestampInput = document.getElementById("timestamp");
       const editingIdInput = document.getElementById("editing-id");
       const showsContainer = document.getElementById("shows-container");
-      const clearFormBtn = document.getElementById("clear-form-btn");
       const saveBtnLabel = document.getElementById("save-btn-label");
+      const clearBtn = document.getElementById("clear-form-btn");
       const formStatus = document.getElementById("form-status");
 
-      function loadShows() {
+      function load() {
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return;
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            shows = parsed;
-          }
-        } catch (err) {
-          console.error("Failed to load shows", err);
-        }
+          if (raw) shows = JSON.parse(raw);
+        } catch {}
       }
 
-      function saveShows() {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(shows));
-        } catch (err) {
-          console.error("Failed to save shows", err);
-          alert("Could not save data. Storage might be full.");
-        }
+      function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(shows));
       }
 
       function escapeHtml(str) {
@@ -482,17 +401,15 @@
           .replace(/'/g, "&#039;");
       }
 
-      function formatMeta(show) {
+      function meta(show) {
         const parts = [];
         if (show.season) parts.push("S" + show.season);
         if (show.episode) parts.push("E" + show.episode);
-        if (show.timestamp && show.timestamp.trim() !== "") {
-          parts.push(show.timestamp.trim());
-        }
+        if (show.timestamp?.trim()) parts.push(show.timestamp.trim());
         return parts.join(" · ");
       }
 
-      function renderShows() {
+      function render() {
         if (!shows.length) {
           showsContainer.innerHTML =
             '<div class="empty"><span>📺</span>Add your first show above.</div>';
@@ -501,32 +418,27 @@
 
         const sorted = [...shows].sort((a, b) => b.lastUpdated - a.lastUpdated);
 
-        const html = sorted
-          .map((show) => {
-            const meta = formatMeta(show);
-            const hasProgress = Boolean(meta);
-            return `
-              <div class="show-row" data-id="${show.id}">
-                <button class="show-main" data-action="edit">
-                  <div class="show-title">${escapeHtml(show.name)}</div>
-                  <div class="show-meta">
-                    ${
-                      hasProgress
-                        ? `<strong>${escapeHtml(meta)}</strong>`
-                        : `<span class="pill">No details yet</span>`
-                    }
-                  </div>
-                </button>
-                <div class="row-actions">
-                  <button class="btn-ghost" data-action="edit">Edit</button>
-                  <button class="btn-danger" data-action="delete">Delete</button>
-                </div>
+        showsContainer.innerHTML = sorted
+          .map(
+            (s) => `
+          <div class="show-row" data-id="${s.id}">
+            <button class="show-main" data-action="edit">
+              <div class="show-title">${escapeHtml(s.name)}</div>
+              <div class="show-meta">
+                ${
+                  meta(s)
+                    ? `<strong>${escapeHtml(meta(s))}</strong>`
+                    : `<span class="pill">No details yet</span>`
+                }
               </div>
-            `;
-          })
+            </button>
+            <div class="row-actions">
+              <button class="btn-danger" data-action="delete">Delete</button>
+            </div>
+          </div>
+        `
+          )
           .join("");
-
-        showsContainer.innerHTML = html;
       }
 
       function resetForm() {
@@ -534,104 +446,77 @@
         editingIdInput.value = "";
         saveBtnLabel.textContent = "Save position";
         formStatus.textContent = "";
-        showNameInput.focus();
       }
 
-      function fillFormFromShow(show) {
-        showNameInput.value = show.name || "";
+      function fillForm(show) {
+        showNameInput.value = show.name;
         seasonInput.value = show.season || "";
         episodeInput.value = show.episode || "";
         timestampInput.value = show.timestamp || "";
         editingIdInput.value = show.id;
         saveBtnLabel.textContent = "Update";
         formStatus.textContent = "Editing “" + show.name + "”";
-        showNameInput.focus();
       }
 
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
         const name = showNameInput.value.trim();
-        if (!name) {
-          alert("Please enter a show name.");
-          return;
-        }
+        if (!name) return alert("Please enter a show name.");
 
-        const seasonRaw = seasonInput.value.trim();
-        const episodeRaw = episodeInput.value.trim();
-        const timestamp = timestampInput.value.trim();
-
-        const season = seasonRaw ? Math.max(1, parseInt(seasonRaw, 10) || 1) : null;
-        const episode = episodeRaw ? Math.max(1, parseInt(episodeRaw, 10) || 1) : null;
-        const idFromForm = editingIdInput.value || null;
+        const id = editingIdInput.value;
         const now = Date.now();
 
-        if (idFromForm) {
-          const index = shows.findIndex((s) => s.id === idFromForm);
-          if (index !== -1) {
-            shows[index] = {
-              ...shows[index],
-              name,
-              season,
-              episode,
-              timestamp,
-              lastUpdated: now,
-            };
+        const season = seasonInput.value ? parseInt(seasonInput.value) : null;
+        const episode = episodeInput.value ? parseInt(episodeInput.value) : null;
+        const timestamp = timestampInput.value.trim();
+
+        if (id) {
+          const idx = shows.findIndex((s) => s.id === id);
+          if (idx !== -1) {
+            shows[idx] = { ...shows[idx], name, season, episode, timestamp, lastUpdated: now };
           }
         } else {
-          const newShow = {
-            id: "show-" + now + "-" + Math.random().toString(16).slice(2),
+          shows.push({
+            id: "id-" + now + "-" + Math.random().toString(16).slice(2),
             name,
             season,
             episode,
             timestamp,
             lastUpdated: now,
-          };
-          shows.push(newShow);
+          });
         }
 
-        saveShows();
-        renderShows();
+        save();
+        render();
         resetForm();
       });
 
-      clearFormBtn.addEventListener("click", function () {
-        resetForm();
-      });
+      clearBtn.addEventListener("click", resetForm);
 
-      showsContainer.addEventListener("click", function (event) {
-        const target = event.target;
-        const row = target.closest(".show-row");
+      showsContainer.addEventListener("click", (e) => {
+        const row = e.target.closest(".show-row");
         if (!row) return;
 
-        const id = row.getAttribute("data-id");
-        if (!id) return;
-
-        const action = target.getAttribute("data-action") || "edit";
+        const id = row.dataset.id;
+        const action = e.target.dataset.action || "edit";
 
         if (action === "delete") {
           const show = shows.find((s) => s.id === id);
-          const confirmed = confirm(
-            `Delete “${show ? show.name : "this show"}” from your list?`
-          );
-          if (!confirmed) return;
-          shows = shows.filter((s) => s.id !== id);
-          saveShows();
-          renderShows();
-          if (editingIdInput.value === id) {
-            resetForm();
+          if (confirm(`Delete “${show?.name}”?`)) {
+            shows = shows.filter((s) => s.id !== id);
+            save();
+            render();
+            if (editingIdInput.value === id) resetForm();
           }
-        } else if (action === "edit") {
+        } else {
           const show = shows.find((s) => s.id === id);
-          if (!show) return;
-          fillFormFromShow(show);
+          if (show) fillForm(show);
         }
       });
 
-      // Initial load
-      loadShows();
-      renderShows();
-      showNameInput.focus();
+      load();
+      render();
     })();
   </script>
 </body>
